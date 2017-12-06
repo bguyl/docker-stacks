@@ -1,0 +1,7 @@
+
+# Maintain 'volumes directory' clean
+
+**/mysql/*
+**/php/*
+**/wordpress/*
+!.gitkeep

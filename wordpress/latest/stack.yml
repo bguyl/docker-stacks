@@ -3,6 +3,7 @@ services:
 
   mysql:
     image: mysql:8
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: thisIsNotAGoodPassword
     volumes:
@@ -19,7 +20,7 @@ services:
       - mysql
     environment:
       WORDPRESS_DB_PASSWORD: thisIsNotAGoodPassword
-    - volumes:
+    volumes:
       - ./wordpress:/var/www/html
     networks: 
       - wordpress
