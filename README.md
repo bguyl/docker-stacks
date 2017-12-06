@@ -1,2 +1,2 @@
 # docker-stacks
-Multiples useful stack files for Docker
+Some useful stack files for Docker
