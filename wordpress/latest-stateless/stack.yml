@@ -6,13 +6,11 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: thisIsNotAGoodPassword
-    volumes:
-      - ./mysql:/var/lib/mysql
     networks: 
       - wordpress
 
   wordpress:
-    image: wordpress
+    image: wordpress:alpine
     restart: always
     ports:
       - 80:80
@@ -20,8 +18,6 @@ services:
       - mysql
     environment:
       WORDPRESS_DB_PASSWORD: thisIsNotAGoodPassword
-    volumes:
-      - ./wordpress-data:/var/www/html
     networks: 
       - wordpress
 

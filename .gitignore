@@ -3,5 +3,5 @@
 
 **/mysql/*
 **/php/*
-**/wordpress/*
+**/wordpress-data/*
 !.gitkeep
