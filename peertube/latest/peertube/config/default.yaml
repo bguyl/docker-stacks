@@ -1,0 +1,112 @@
+# /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
+
+listen:
+  hostname: '127.0.0.1'
+  port: 9000
+
+webserver:
+  https: false
+  hostname: 'localhost'
+  port: 9000
+
+# Proxies to trust to get real client IP
+# If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
+# If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
+trust_proxy:
+  - 'loopback'
+
+# Your database name will be "peertube"+database.suffix
+database:
+  hostname: 'localhost'
+  port: 5432
+  suffix: '_dev'
+  username: 'peertube'
+  password: 'peertube'
+
+redis:
+  hostname: 'localhost'
+  port: 6379
+  auth: null
+  db: 0
+
+smtp:
+  hostname: null
+  port: 465
+  username: null
+  password: null
+  tls: true
+  disable_starttls: false
+  ca_file: null # Used for self signed certificates
+  from_address: 'admin@example.com'
+
+# From the project root directory
+storage:
+  avatars: 'storage/avatars/'
+  videos: 'storage/videos/'
+  logs: 'storage/logs/'
+  previews: 'storage/previews/'
+  thumbnails: 'storage/thumbnails/'
+  torrents: 'storage/torrents/'
+  cache: 'storage/cache/'
+
+log:
+  level: 'info' # debug/info/warning/error
+
+cache:
+  previews:
+    size: 1 # Max number of previews you want to cache
+
+admin:
+  email: 'admin@example.com' # Your personal email as administrator
+
+signup:
+  enabled: false
+  limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  filters:
+    cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
+      whitelist: []
+      blacklist: []
+
+user:
+  # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
+  # -1 == unlimited
+  video_quota: -1
+
+# If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
+# In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
+# Please, do not disable transcoding since many uploaded videos will not work
+transcoding:
+  enabled: true
+  threads: 1
+  resolutions: # Only created if the original video has a higher resolution, uses more storage!
+    240p: false
+    360p: false
+    480p: false
+    720p: false
+    1080p: false
+
+instance:
+  name: 'PeerTube'
+  short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
+  description: 'Welcome to this PeerTube instance!' # Support markdown
+  terms: 'No terms for now.' # Support markdown
+  default_client_route: '/videos/trending'
+  # By default, "do_not_list" or "blur" or "display" NSFW videos
+  # Could be overridden per user with a setting
+  default_nsfw_policy: 'do_not_list'
+  customizations:
+    javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
+    css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
+  # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add '/' to "Disallow:'
+  robots: |
+    User-agent: *
+    Disallow: ''
+
+services:
+  # Cards configuration to format video in Twitter
+  twitter:
+    username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
+    # If true, a video player will be embedded in the Twitter feed on PeerTube video share
+    # If false, we use an image link card that will redirect on your PeerTube instance
+    # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
+    whitelisted: false

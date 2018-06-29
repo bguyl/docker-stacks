@@ -1,0 +1,77 @@
+version: "3.3"
+
+services:
+
+  # reverse-proxy:
+  #   image: traefik
+  #   command: --api --docker # Enables the web UI and tells Træfik to listen to docker
+  #   ports:
+  #     - "80:80"     # The HTTP port
+  #     - "443:443"   # The HTTPS port
+  #     - "8080:8080" # The Web UI (enabled by --api)
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+  #     - ./traefik/acme.json:/etc/acme.json
+  #     - ./traefik/traefik.toml:/traefik.toml
+  #   restart: "always"
+
+  peertube:
+    # If you don't want to use the official image and build one from sources
+    # build:
+    #   context: .
+    #   dockerfile: ./support/docker/production/Dockerfile.stretch
+    image: chocobozzz/peertube:production-stretch
+    environment:
+      PEERTUBE_WEBSERVER_HOSTNAME: localhost
+      PEERTUBE_WEBSERVER_PORT: 80
+      PEERTUBE_WEBSERVER_HTTPS: 'false'
+      PEERTUBE_DB_HOSTNAME: postgres
+      PEERTUBE_DB_USERNAME: postgres_user
+      PEERTUBE_DB_PASSWORD: postgres_password
+      PEERTUBE_REDIS_HOSTNAME: redis
+      PEERTUBE_SMTP_USERNAME: ${PEERTUBE_SMTP_USERNAME}
+      PEERTUBE_SMTP_PASSWORD: ${PEERTUBE_SMTP_PASSWORD}
+      PEERTUBE_SMTP_HOSTNAME: ${PEERTUBE_SMTP_HOSTNAME}
+      PEERTUBE_SMTP_PORT: 25
+      PEERTUBE_SMTP_FROM: noreply@localhost
+      PEERTUBE_SMTP_TLS: 'true'
+      PEERTUBE_ADMIN_EMAIL: admin@localhost
+      # /!\ Prefer to use the PeerTube admin interface to set the following configurations /!\
+      # PEERTUBE_SIGNUP_ENABLED: ${PEERTUBE_SIGNUP_ENABLED}
+      # PEERTUBE_TRANSCODING_ENABLED: ${PEERTUBE_TRANSCODING_ENABLED}
+    # Traefik labels are suggested as an example for people using Traefik,
+    # remove them if you are using another reverse proxy.
+    # labels:
+    #   traefik.enable: "true"
+    #   traefik.frontend.rule: "Host:${PEERTUBE_WEBSERVER_HOSTNAME}"
+    #   traefik.port: "9000"
+    # If you don't want to use a reverse proxy (not suitable for production!)
+    ports:
+      - "80:9000"
+    volumes:
+      - ./peertube/data:/data
+      - ./peertube/config:/config
+    depends_on:
+      - postgres
+      - redis
+    restart: "always"
+
+  postgres:
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: peertube
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    restart: "always"
+    # labels:
+    #   traefik.enable: "false"
+
+  redis:
+    image: redis:4-alpine
+    volumes:
+      - ./redis:/data
+    restart: "always"
+    # labels:
+    #   traefik.enable: "false"

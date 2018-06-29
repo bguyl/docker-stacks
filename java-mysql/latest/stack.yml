@@ -2,37 +2,40 @@ version: '3.1'
 services:
 
   mysql:
-    image: mysql:8.0.3
+    image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: thisIsNotAGoodPassword
     volumes:
       - ./mysql:/var/lib/mysql
     networks: 
-      - damp
+      - java-mysql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:4.7
+    image: phpmyadmin/phpmyadmin
     restart: always
+    depends_on:
+      - mysql
     environment:
       PMA_HOST: mysql
       PMA_PASSWORD: thisIsNotAGoodPassword
     ports:
       - 8080:80
     networks:
-      - damp
+      - java-mysql
 
-  php:
-    image: php:7.2.0-apache-stretch
+  java:
+    image: openjdk
     restart: always
+    depends_on:
+      - mysql
     environment:
+      MYSQL_HOST: mysql
       MYSQL_ROOT_PASSWORD: thisIsNotAGoodPassword
-    ports:
-      - 80:80
     volumes:
-      - ./php:/var/www/html
+      - ./java:/usr/src/
     networks:
-      - damp
+      - java-mysql
 
 networks:
-  damp:
+  java-mysql

@@ -12,3 +12,5 @@
 
 * [DAMP](damp/DESCRIPTION.md): Apache-MySQL-PHP stack
 * [Wordpress](wordpress/DESCRIPTION.md)
+* [Java-MySQL](java-mysql/DESCRIPTION.md)
+* [Peertube](peertube/DESCRIPTION.md)
